@@ -1,0 +1,34 @@
+
+body {
+    padding-top: 10px; 
+    padding-left: 10px;
+    font-size: 18px;
+    color: white;
+    background-color: black;
+
+}
+
+.no_terminais {
+    text-transform:uppercase;
+}
+
+#gramaticas {
+    margin-left: 35px;
+}
+
+.variaveis {
+    width: 30px;
+    margin-right: 5px;
+}
+
+.boxClicado {
+    background-color: aquamarine;
+}
+
+.conteudoDosTitulos {
+    color: aquamarine;
+}
+
+a, #erro {
+    color: red;
+}

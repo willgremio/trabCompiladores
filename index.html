@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Trabalho de Compiladores</title>
+        <meta charset="UTF-8">
+        <script src="js/jquery.js"></script>
+        <script src="js/index.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/index.css?v=1">
+
+    </head>
+    <body>
+        <h1>Trabalho de Compiladores</h1>
+        <h2>Informe os dados</h2>
+        <p id="erro">Obs: Não utilize a letra X para os Não Terminais, pois ela foi considerada sendo a sentença vazia!</p>
+        <form action="formar_gramaticas.php" method="post">
+            Informe o número de Não Terminais: <input type="number" data-tipo="NoTerminais" id="NoTerminais" />
+            <br /><br />
+            <div id="InputsNoTerminais"></div>       
+
+            <br /><br />
+
+            Informe o número de Terminais: <input type="number" data-tipo="Terminais" id="Terminais">
+            <br /><br />
+            <div id="InputsTerminais"></div>
+
+
+            <input type="submit">
+        </form>
+
+        <br /><br />
+        <br /><br />
+
+        <footer class="conteudoDosTitulos">
+            <p>Desenvolvido por: Willian Serafini <br />
+                Email: willian.serafini@gmail.com</p>
+        </footer>
+    </body>
+</html>
