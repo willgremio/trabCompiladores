@@ -42,7 +42,7 @@ class VerificaGramatica {
                 throw new Exception('1.Grámatica tem recursividade à esquerda!');
             }
 
-            if (Util::isSimboloNaoTerminal($primeiroSimbolo)) {
+            if (Util::isSimboloNaoTerminal($primeiroSimbolo) && !Util::isSentenciaVazia($primeiroSimbolo)) {
                 $this->verificaProducaoSeComecamCom($primeiroSimbolo, $ladoEsquerdo);
             }
         }
@@ -54,7 +54,7 @@ class VerificaGramatica {
       S => Aa
       A => Sb|cA|a */
     private function verificaProducaoSeComecamCom($primeiroSimbolo, $ladoEsquerdo) {
-        $dadosGramatica = $this->getGramatica();
+        $dadosGramatica = $this->getGramatica();        
         $producoes = explode('|', $dadosGramatica[$primeiroSimbolo]);
         foreach ($producoes as $producao) {
             $primeiroSimbolo = $producao[0];
