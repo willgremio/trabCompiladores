@@ -5,6 +5,7 @@ if (!isset($_POST['data'])) {
 
 require_once('Classe/VerificaGramatica.php');
 require_once('Classe/Tabela.php');
+require_once('Classe/ReconhecedorEntrada.php');
 
 $gramatica = [];
 $variaveisLadoEsquerdo = $_POST['data']['GramaticaVariavel']['Esquerdo'];
@@ -20,10 +21,12 @@ foreach ($variaveisLadoEsquerdo as $indice => $esquerdo) {
 }
 
 try {
-    $objVerGram = new VerificaGramatica($gramatica);
-    $objVerGram->validarRegrasLL1();
+    (new VerificaGramatica($gramatica))->validarRegrasLL1();
     $objTabela = new Tabela($gramatica, $simboloInicial);
     $objTabela->construcaoTabela($variaveisNaoTerminaveis, $variaveisTerminaveis);
+    $objReconhecedorEntrada = new ReconhecedorEntrada($objTabela);
+    $objReconhecedorEntrada->reconhecer('i+i*i');
+    
 } catch (Exception $ex) {
     $erro = $ex->getMessage();
 }
@@ -44,7 +47,11 @@ try {
         if (isset($erro)) {
             echo '<span id="erro">' . $erro . '</span><br />';
         } else {
+            echo '<div>';
             echo $objTabela->getTabelaGerada();
+            echo '<br /><br />';
+            echo $objReconhecedorEntrada->getTabelaReconhecedor();
+            echo '</div>';
         }
         ?>     
         

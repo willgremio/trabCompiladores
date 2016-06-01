@@ -42,6 +42,10 @@ class Tabela {
     public function getTabelaGerada() {
         return $this->tabelaGerada;
     }
+    
+    public function getArrayAgrupaLinhasColunas() {
+        return $this->arrayAgrupaLinhasColunas;
+    }
 
     //Vai em cada produção da gramatica e faz o first e follow dos NT e por fim gera e seta a tabela     
     public function construcaoTabela($variaveisLadoEsquerdo, $variaveisLadoDireito) {
@@ -138,7 +142,7 @@ class Tabela {
     public function criaTabela($variaveisLadoEsquerdo, $variaveisLadoDireito) {
         $variaveisLadoDireito[] = '$';
 
-        $html = '<table border="1">';
+        $html = '<table cellpadding="10" cellspacing="1" border="1">';
         $html .= '<tr>';
         $html .= '<th></th>';
 
@@ -149,7 +153,7 @@ class Tabela {
         $html .= '</tr>';
 
         foreach ($variaveisLadoEsquerdo as $variavelNaoTerminal) {
-            $html .= '<tr>';
+            $html .= '<tr align="center">';
             $html .= '<td>' . $variavelNaoTerminal . '</td>';
             foreach ($variaveisLadoDireito as $variavelTerminal) {
                 if (isset($this->arrayAgrupaLinhasColunas[$variavelNaoTerminal][$variavelTerminal])) {

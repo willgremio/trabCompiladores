@@ -10,7 +10,7 @@ $(function() {
             }
 
             for (var i = 1; i <= numero; i++) {
-                html += i + ': <input type="text" class="' + classe + '" name="data[' + tipo + '][]" /><br />';
+                html += i + ': <input type="text" maxlength="1" class="' + classe + '" name="data[' + tipo + '][]" /><br />';
             }
 
             $('#Inputs' + tipo).html(html);
