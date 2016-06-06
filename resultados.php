@@ -3,6 +3,7 @@ if (!isset($_POST['data'])) {
     header('Location: index.html');
 }
 
+require_once('Config/parametros.php');
 require_once('Classe/VerificaGramatica.php');
 require_once('Classe/Tabela.php');
 require_once('Classe/ReconhecedorEntrada.php');
@@ -25,8 +26,7 @@ try {
     $objTabela = new Tabela($gramatica, $simboloInicial);
     $objTabela->construcaoTabela($variaveisNaoTerminaveis, $variaveisTerminaveis);
     $objReconhecedorEntrada = new ReconhecedorEntrada($objTabela);
-    $objReconhecedorEntrada->reconhecer('i+i*i');
-    
+    $objReconhecedorEntrada->reconhecer(RECONHECER_ENTRADA);
 } catch (Exception $ex) {
     $erro = $ex->getMessage();
 }
@@ -45,8 +45,11 @@ try {
         <h3>Tabela Gerada</h3>
         <?php
         if (isset($erro)) {
-            echo '<span id="erro">' . $erro . '</span><br />';
-        } else {
+            echo '<span id="erro">' . $erro . '</span><br /><br /><br />';
+        }
+
+
+        if (isset($objTabela)) { // se nao deu erro na verificacao de gramatica LL1, imprimi as tabelas
             echo '<div>';
             echo $objTabela->getTabelaGerada();
             echo '<br /><br />';
@@ -54,7 +57,7 @@ try {
             echo '</div>';
         }
         ?>     
-        
+
         <br /><br />
         <button onclick="history.go(-1);">Voltar</button>
     </body>

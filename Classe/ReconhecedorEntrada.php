@@ -18,11 +18,11 @@ class ReconhecedorEntrada {
     private function setObjTabela($objTabela) {
         $this->objTabela = $objTabela;
     }
-    
+
     private function setTabelaReconhecedor($tabelaReconhecedor) {
         $this->tabelaReconhecedor = $tabelaReconhecedor;
     }
-    
+
     public function getTabelaReconhecedor() {
         return $this->tabelaReconhecedor;
     }
@@ -32,15 +32,20 @@ class ReconhecedorEntrada {
         $primeiroRegistroPilha = '$' . $simboloInicial;
         $entrada .= '$';
         $this->setValoresNoReconhecedor($primeiroRegistroPilha, $entrada, ''); // valores iniciais
-        $this->teste($entrada, $simboloInicial);
+        $this->gerarDadosDaTabela($entrada, $simboloInicial);
+        $this->criarTabela();
+    }
+
+    private function criarTabela() {
         $tabelaGerada = $this->criaTabelaReconhecedor();
         $this->setTabelaReconhecedor($tabelaGerada);
     }
 
-    private function teste($entrada, $simboloNT, $iteracao = 1) {
+    private function gerarDadosDaTabela($entrada, $simboloNT, $iteracao = 1) {
         $primeiroSimboloDaEntrada = $entrada[0];
         $arrayAgrupaLinhasColunas = $this->objTabela->getArrayAgrupaLinhasColunas();
         if (!isset($arrayAgrupaLinhasColunas[$simboloNT][$primeiroSimboloDaEntrada])) {
+            $this->criarTabela(); //se der erro cria a tabela pra mostrar até onde foi
             throw new Exception("Não existe uma produção em que $simboloNT produz $primeiroSimboloDaEntrada");
         }
 
@@ -59,10 +64,6 @@ class ReconhecedorEntrada {
 
         $novoRegistroPilha = str_replace($simboloNT, $trocarPor, $ultimoElemento['pilha']); //troca o simboloNT que tinha na pilha pela producao ao contrario desse simboloNT
         $this->setValoresNoReconhecedor($novoRegistroPilha, $entrada, $producao);
-        /*if ($iteracao == 11) {
-            var_dump($this->arrayReconhecedor);
-            exit;
-        }*/
 
         $ultimoSimbolo = substr($novoRegistroPilha, -1);
         if (!Util::isSimboloNaoTerminal($ultimoSimbolo) && $ultimoSimbolo != '$') { // se é terminal e nao chegou ao fim da pilha
@@ -72,11 +73,10 @@ class ReconhecedorEntrada {
             $ultimoSimbolo = substr($novoRegistroPilha, -1);
         }
 
-        //var_dump($this->arrayReconhecedor);
         $ultimoElementoReconhecedor = end($this->arrayReconhecedor);
         if ($ultimoElementoReconhecedor['pilha'] != '$') {
             $iteracao ++;
-            $this->teste($entrada, $ultimoSimbolo, $iteracao);
+            $this->gerarDadosDaTabela($entrada, $ultimoSimbolo, $iteracao);
         }
     }
 
@@ -87,7 +87,7 @@ class ReconhecedorEntrada {
             'saida' => $saida
         ];
     }
-    
+
     public function criaTabelaReconhecedor() {
         $html = '<table cellpadding="10" cellspacing="1" border="1">';
         $html .= '<tr><th>PILHA</th><th>ENTRADA</th><th>SAÍDA</th></tr>';
@@ -98,7 +98,7 @@ class ReconhecedorEntrada {
             $html .= '<td>' . $registroReconhecedor['saida'] . '</td>';
             $html .= '</tr>';
         }
-        
+
         $html .= '</table>';
         return $html;
     }
