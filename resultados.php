@@ -39,25 +39,7 @@ try {
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <script src="js/jquery.js"></script>
-        <script>
-            $(function () {
-                $('#ButtonTesteSentenca').click(function () {
-                    var sentenca = $('#sentenca').val();
-                    $.ajax({
-                        url: 'ajax/reconhecer_sentenca.php',
-                        dataType: 'json',
-                        data: 'data[sentenca]=' + sentenca,
-                        type: 'POST',
-                        success: function (retorno) {
-                            $('#RespostaSentenca').html(retorno.msg + '<br />' + retorno.tabelaGerada);
-                        },
-                        error: function () {
-                            alert('Houve algum erro ao tentar fazer o teste da sentença!');
-                        }
-                    });
-                });
-            })
-        </script>
+        <script src="js/reconhecer_sentenca.js"></script>
     </head>
     <body>
         <h1>Trabalho de Compiladores</h1>
