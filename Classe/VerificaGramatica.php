@@ -24,11 +24,10 @@ class VerificaGramatica {
     }
 
     public function validarRegrasLL1() {
-        foreach ($this->getGramatica() as $ladoEsquerdo => $ladoDireito) {
-            //var_dump($producao);
-            $this->verificaRecursividadeEsquerda($ladoEsquerdo, $ladoDireito);
+        foreach ($this->getGramatica() as $ladoEsquerdo => $ladoDireito) {            
+            $this->verificaRecursividadeEsquerda($ladoEsquerdo, $ladoDireito);                   
             $this->verificaFatoracao($ladoEsquerdo, $ladoDireito);
-            $this->verificaAmbiguidade($ladoEsquerdo, $ladoDireito);
+            $this->verificaAmbiguidade($ladoEsquerdo, $ladoDireito);     
         }
     }
 
@@ -53,8 +52,9 @@ class VerificaGramatica {
       ex:
       S => Aa
       A => Sb|cA|a */
+
     private function verificaProducaoSeComecamCom($primeiroSimbolo, $ladoEsquerdo) {
-        $dadosGramatica = $this->getGramatica();        
+        $dadosGramatica = $this->getGramatica();
         $producoes = explode('|', $dadosGramatica[$primeiroSimbolo]);
         foreach ($producoes as $producao) {
             $primeiroSimbolo = $producao[0];
@@ -67,26 +67,38 @@ class VerificaGramatica {
     private function verificaFatoracao($ladoEsquerdo, $ladoDireito) {
         //quando existe um não-determinismo nas regras de produções da gramática.
         //ex:A => aB|aC
-        
+
         $producoes = explode('|', $ladoDireito);
         $primeiroSimboloTerminal = '';
         foreach ($producoes as $producao) {
             //pega o primeiro simbolo pra testar com o proximo da lista
-            if(empty($primeiroSimboloTerminal)) {
+            if (empty($primeiroSimboloTerminal)) {
                 $primeiroSimboloTerminal = $producao[0];
                 continue; // vai pro próximo da lista
             }
-            
+
             $primeiroSimbolo = $producao[0];
-            if($primeiroSimbolo == $primeiroSimboloTerminal) {
+            if ($primeiroSimbolo == $primeiroSimboloTerminal) {
                 throw new Exception('Deve-se fazer a fatoração da Grámatica!');
             }
         }
-        
     }
 
     private function verificaAmbiguidade($ladoEsquerdo, $ladoDireito) {
-        
+        $producoesLadoDireito = explode('|', $ladoDireito);
+        $ultimoSimboloVerificar = '';
+        foreach ($producoesLadoDireito as $producaoLadoDireito) {
+            $ultimoSimboloDaProducao = substr($producaoLadoDireito, -1);
+            if(empty($ultimoSimboloVerificar) && $ultimoSimboloDaProducao == $ladoEsquerdo) {
+                $ultimoSimboloVerificar = substr($producaoLadoDireito, -1); //ex: E => aE
+                continue;
+            }
+            
+            $ultimoSimbolo = substr($producaoLadoDireito, -1);
+            if ($ultimoSimbolo == $ultimoSimboloVerificar) { //ex: E => aE|bE
+                throw new Exception('Grámatica é ambígua!');
+            }
+        }
     }
 
 }
