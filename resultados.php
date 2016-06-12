@@ -3,7 +3,6 @@ if (!isset($_POST['data'])) {
     header('Location: index.html');
 }
 
-require_once('Config/parametros.php');
 require_once('Classe/VerificaGramatica.php');
 require_once('Classe/Tabela.php');
 require_once('Classe/ReconhecedorEntrada.php');
@@ -16,17 +15,18 @@ $variaveisTerminaveis = $_POST['data']['Terminais'];
 $variaveisNaoTerminaveis = $_POST['data']['NaoTerminais'];
 
 $simboloInicial = $_POST['data']['simbolo_inicio'];
+$sentenca = $_POST['data']['sentenca'];
 
 foreach ($variaveisLadoEsquerdo as $indice => $esquerdo) {
     $gramatica[$esquerdo] = $variaveisLadoDireito[$indice];
 }
 
 try {
+    session_start();
     (new VerificaGramatica($gramatica))->validarRegrasLL1();
     $objTabela = new Tabela($gramatica, $simboloInicial);
     $objTabela->construcaoTabela($variaveisNaoTerminaveis, $variaveisTerminaveis);
-    $objReconhecedorEntrada = new ReconhecedorEntrada($objTabela);
-    $objReconhecedorEntrada->reconhecer(RECONHECER_ENTRADA);
+    $_SESSION['objTabela'] = ($objTabela);
 } catch (Exception $ex) {
     $erro = $ex->getMessage();
 }
@@ -38,6 +38,26 @@ try {
         <title>Trabalho de Compiladores</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/jquery.js"></script>
+        <script>
+            $(function () {
+                $('#ButtonTesteSentenca').click(function () {
+                    var sentenca = $('#sentenca').val();
+                    $.ajax({
+                        url: 'ajax/reconhecer_sentenca.php',
+                        dataType: 'json',
+                        data: 'data[sentenca]=' + sentenca,
+                        type: 'POST',
+                        success: function (retorno) {
+                            $('#RespostaSentenca').html(retorno.msg + '<br />' + retorno.tabelaGerada);
+                        },
+                        error: function () {
+                            alert('Houve algum erro ao tentar fazer o teste da sentença!');
+                        }
+                    });
+                });
+            })
+        </script>
     </head>
     <body>
         <h1>Trabalho de Compiladores</h1>
@@ -48,15 +68,18 @@ try {
             echo '<span id="erro">' . $erro . '</span><br /><br /><br />';
         }
 
-
         if (isset($objTabela)) { // se nao deu erro na verificacao de gramatica LL1, imprimi as tabelas
             echo '<div>';
             echo $objTabela->getTabelaGerada();
-            echo '<br /><br />';
-            echo $objReconhecedorEntrada->getTabelaReconhecedor();
             echo '</div>';
         }
         ?>     
+
+        <br />
+        <input id="sentenca" type="text" placeholder="Digite aqui a sentença" />
+        <button id="ButtonTesteSentenca" type="button">Testar Sentença!</button>
+        <br /><br /><br />
+        <div id="RespostaSentenca"></div>
 
         <br /><br />
         <button onclick="history.go(-1);">Voltar</button>
