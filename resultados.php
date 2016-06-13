@@ -15,7 +15,6 @@ $variaveisTerminaveis = $_POST['data']['Terminais'];
 $variaveisNaoTerminaveis = $_POST['data']['NaoTerminais'];
 
 $simboloInicial = $_POST['data']['simbolo_inicio'];
-$sentenca = $_POST['data']['sentenca'];
 
 foreach ($variaveisLadoEsquerdo as $indice => $esquerdo) {
     $gramatica[$esquerdo] = $variaveisLadoDireito[$indice];

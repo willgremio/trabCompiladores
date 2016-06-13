@@ -4,7 +4,7 @@ require_once('../Classe/Tabela.php');
 require_once('../Classe/ReconhecedorEntrada.php');
 
 session_start();
-$sentenca = $_POST['data']['sentenca'];
+$sentenca = $_GET['entrada'];
 $objTabela = ($_SESSION['objTabela']);
 $objReconhecedorEntrada = new ReconhecedorEntrada($objTabela);
 $retorno = array('msg' => '');
